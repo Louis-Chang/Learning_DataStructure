@@ -121,39 +121,39 @@ public class BinarySearchTree {
 
     public void deleteByRecursion(TreeNode root, int value) throws Exception {
 
-        if (root == null) {
-            setRoot(null);
-        } else if (value < root.getValue()) {
-            if (root.getLeft() != null) {
-                deleteInRecursion(root.getLeft(), value);
-            } else {
-
-            }
-        }
-
-
-        if (targetNode == null) {
-            throw new Exception("Value " + value + " does not exist in the tree! ");
-        }
-
-        TreeNode parent = null;
-        TreeNode successor = null;
-        boolean isLeft = false;
-
-        // 分情況討論
-        if (targetNode == getRoot()) {
-            setRoot(null);
-        } else {
-            if (targetNode.getLeft()!=null && targetNode.getRight()!=null) {
-
-            } else if (targetNode.getLeft()!=null && targetNode.getRight()==null) {
-
-            } else if (targetNode.getLeft()==null && targetNode.getRight()!=null) {
-
-            } else {
-
-            }
-        }
+//        if (root == null) {
+//            setRoot(null);
+//        } else if (value < root.getValue()) {
+//            if (root.getLeft() != null) {
+//                deleteInRecursion(root.getLeft(), value);
+//            } else {
+//
+//            }
+//        }
+//
+//
+//        if (targetNode == null) {
+//            throw new Exception("Value " + value + " does not exist in the tree! ");
+//        }
+//
+//        TreeNode parent = null;
+//        TreeNode successor = null;
+//        boolean isLeft = false;
+//
+//        // 分情況討論
+//        if (targetNode == getRoot()) {
+//            setRoot(null);
+//        } else {
+//            if (targetNode.getLeft()!=null && targetNode.getRight()!=null) {
+//
+//            } else if (targetNode.getLeft()!=null && targetNode.getRight()==null) {
+//
+//            } else if (targetNode.getLeft()==null && targetNode.getRight()!=null) {
+//
+//            } else {
+//
+//            }
+//        }
     }
 
     // private methods
@@ -168,6 +168,6 @@ public class BinarySearchTree {
             currentNode = currentNode.getLeft();
         }
 
-
+        return null;
     }
 }
