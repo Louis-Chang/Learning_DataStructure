@@ -24,49 +24,48 @@ public class BinarySearchTree {
         }
 
         TreeNode currentNode = getRoot();
-        while (true) {
+        boolean hasFoundPosition = false;
+        while (!hasFoundPosition) {
             if (newNode.getValue() < currentNode.getValue()) {
                 if (currentNode.getLeft() != null) {
                     currentNode = currentNode.getLeft();
                 } else {
                     currentNode.setLeft(newNode);
-                    break;
+                    hasFoundPosition = true;
                 }
-            } else if (newNode.getValue() < currentNode.getValue()) {
+            } else if (newNode.getValue() > currentNode.getValue()) {
                 if (currentNode.getRight() != null) {
                     currentNode = currentNode.getRight();
                 } else {
                     currentNode.setRight(newNode);
-                    break;
+                    hasFoundPosition = true;
                 }
             } else {
                 throw new Exception("Binary Search Tree does not allow nodes with the same value! ");
             }
         }
+
+
     }
 
-    public boolean search(int value) {
-
+    public TreeNode search(int value) {
         TreeNode currentNode = getRoot();
-        while (true) {
+
+        while (currentNode!=null) {
             if (value == currentNode.getValue()) {
-                return true;
+                break;
             } else if (value < currentNode.getValue()) {
                 if (currentNode.getLeft() != null) {
                     currentNode = currentNode.getLeft();
-                } else {
-                    break;
                 }
             } else {
                 if (currentNode.getRight() != null) {
                     currentNode = currentNode.getRight();
-                } else {
-                    break;
                 }
             }
         }
 
-        return false;
+        return currentNode;
     }
 
 
@@ -75,16 +74,7 @@ public class BinarySearchTree {
         TreeNode currentNode = getRoot();
         boolean isLeftChild = false;
 
-        while (currentNode!=null && value!=currentNode.getValue()) {
-            parentNode = currentNode;
-            if (value < currentNode.getValue()) {
-                isLeftChild = true;
-                currentNode = currentNode.getLeft();
-            } else {
-                isLeftChild = false;
-                currentNode = currentNode.getRight();
-            }
-        }
+
 
         if (currentNode == null) {
             throw new Exception("Value " + value + " does not exist in the tree! ");
@@ -154,6 +144,16 @@ public class BinarySearchTree {
 //
 //            }
 //        }
+    }
+
+    public void traversePreOrder() {
+
+    }
+    public void traverseInOrder() {
+
+    }
+    public void traversePostOrder() {
+
     }
 
     // private methods

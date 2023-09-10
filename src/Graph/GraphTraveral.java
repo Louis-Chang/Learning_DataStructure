@@ -31,6 +31,13 @@ public class GraphTraveral {
         this.visited = visited;
     }
 
+    public void DFS() {
+        for (int i=0; i<listGraph.getGraphs().size(); i++) {
+            if (!visited[i]) {
+                DFSTraversal(i);
+            }
+        }
+    }
     private void DFSTraversal(int v) {
         if (visited[v]) {
             return;
@@ -48,14 +55,14 @@ public class GraphTraveral {
             }
         }
     }
-    public void DFS() {
+
+    public void BFS() {
         for (int i=0; i<listGraph.getGraphs().size(); i++) {
             if (!visited[i]) {
-                DFSTraversal(i);
+                BFSTraversal(i);
             }
         }
     }
-
     private void BFSTraversal(int v) {
         visited[v] = true;
         Deque<Integer> deque = new ArrayDeque<>();
@@ -72,13 +79,6 @@ public class GraphTraveral {
                     deque.addLast(nextNode);
                     visited[nextNode] = true;
                 }
-            }
-        }
-    }
-    public void BFS() {
-        for (int i=0; i<listGraph.getGraphs().size(); i++) {
-            if (!visited[i]) {
-                BFSTraversal(i);
             }
         }
     }
