@@ -35,23 +35,4 @@ public class TreeNode {
         this.right = right;
     }
 
-
-    public boolean hasNoChild() {
-        if(getLeft()==null && getRight()==null) {
-            return true;
-        }
-        return  false;
-    }
-    public boolean hasOneChild() {
-        if((getLeft()!=null && getRight()!=null) || (getRight()==null && getLeft()!=null)) {
-            return true;
-        }
-        return  false;
-    }
-    public boolean hasTwoChildren() {
-        if (getLeft()!=null && getRight()!=null) {
-            return true;
-        }
-        return false;
-    }
 }

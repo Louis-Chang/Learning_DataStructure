@@ -69,105 +69,113 @@ public class BinarySearchTree {
     }
 
 
-    public void deleteByLoop(int value) throws Exception {
+    public void deleteByLoop(int key) throws Exception {
         TreeNode parentNode = getRoot();
         TreeNode currentNode = getRoot();
         boolean isLeftChild = false;
 
-
-
-        if (currentNode == null) {
-            throw new Exception("Value " + value + " does not exist in the tree! ");
+        if (currentNode==null) {
+            throw new Exception("The tree is empty. ");
         }
 
-        if (currentNode.getLeft()==null && currentNode.getRight()==null) {
-            if (currentNode == getRoot()) {
-                setRoot(null);
-            } else if (isLeftChild) {
+        while(currentNode!=null && currentNode.getValue()!=key) {
+            parentNode = currentNode;
+            if(key < currentNode.getValue()) {
+                isLeftChild = true;
+                currentNode = currentNode.getLeft();
+            } else {
+                isLeftChild = false;
+                currentNode = currentNode.getRight();
+            }
+        }
+
+        if(currentNode.getLeft()==null && currentNode.getRight()==null) {
+            if(isLeftChild) {
                 parentNode.setLeft(null);
             } else {
                 parentNode.setRight(null);
             }
-        } else if (currentNode.getLeft()!=null && currentNode.getRight()==null) {
-            if (currentNode == getRoot()) {
-                setRoot(currentNode.getRight());
-            } else if (isLeftChild) {
+        } else if(currentNode.getRight()==null) {
+            if(isLeftChild) {
                 parentNode.setLeft(currentNode.getLeft());
             } else {
                 parentNode.setRight(currentNode.getLeft());
             }
-        } else if (currentNode.getLeft()==null && currentNode.getRight()!=null) {
-            if (currentNode == getRoot()) {
-                setRoot(currentNode.getRight());
-            } else if (isLeftChild) {
+        } else if (currentNode.getLeft()==null) {
+            if(isLeftChild) {
                 parentNode.setLeft(currentNode.getRight());
             } else {
                 parentNode.setRight(currentNode.getRight());
             }
         } else {
-
+            TreeNode successor = popSuccessor(currentNode);
+            if(isLeftChild) {
+                parentNode.setLeft(successor);
+            } else {
+                parentNode.setRight(successor);
+            }
+            successor.setLeft(currentNode.getLeft());
+            successor.setRight(currentNode.getRight());
         }
     }
-
-    public void deleteByRecursion(TreeNode root, int value) throws Exception {
-
-//        if (root == null) {
-//            setRoot(null);
-//        } else if (value < root.getValue()) {
-//            if (root.getLeft() != null) {
-//                deleteInRecursion(root.getLeft(), value);
-//            } else {
-//
-//            }
-//        }
-//
-//
-//        if (targetNode == null) {
-//            throw new Exception("Value " + value + " does not exist in the tree! ");
-//        }
-//
-//        TreeNode parent = null;
-//        TreeNode successor = null;
-//        boolean isLeft = false;
-//
-//        // 分情況討論
-//        if (targetNode == getRoot()) {
-//            setRoot(null);
-//        } else {
-//            if (targetNode.getLeft()!=null && targetNode.getRight()!=null) {
-//
-//            } else if (targetNode.getLeft()!=null && targetNode.getRight()==null) {
-//
-//            } else if (targetNode.getLeft()==null && targetNode.getRight()!=null) {
-//
-//            } else {
-//
-//            }
-//        }
-    }
-
-    public void traversePreOrder() {
-
-    }
-    public void traverseInOrder() {
-
-    }
-    public void traversePostOrder() {
-
-    }
-
-    // private methods
-    private TreeNode getSuccessor(TreeNode treeNode) {
-        TreeNode successorNode = null;
-        TreeNode successorParentNode = null;
+    private TreeNode popSuccessor(TreeNode treeNode) {  // 找右子樹最小的Node
         TreeNode currentNode = treeNode.getRight();
+        TreeNode parentNode = treeNode;
 
-        while (currentNode != null) {
-            successorParentNode = successorNode;
-            successorNode = currentNode;
+        while (currentNode.getLeft()!=null) {
+            parentNode = currentNode;
             currentNode = currentNode.getLeft();
         }
 
-        return null;
+        parentNode.setLeft(currentNode.getRight());
+
+        return currentNode;
+    }
+
+    public void traversePreOrder(TreeNode root) throws Exception {  // 立馬印
+        if(root == null) {
+            throw new Exception("Root is null! ");
+        }
+
+        TreeNode currentNode = root;
+
+        System.out.print(currentNode.getValue());
+        if(currentNode.getLeft() != null) {
+            traversePreOrder(currentNode.getLeft());
+        }
+        if(currentNode.getRight() != null) {
+            traversePreOrder(currentNode.getRight());
+        }
+    }
+    public void traverseInOrder(TreeNode root) throws Exception {    // 左邊回來後印
+        if(root == null) {
+            throw new Exception("Root is null! ");
+        }
+
+        TreeNode currentNode = root;
+
+        if(currentNode.getLeft() != null) {
+            traverseInOrder(currentNode.getLeft());
+        }
+        System.out.print(currentNode.getValue());
+        if(currentNode.getRight() != null) {
+            traverseInOrder(currentNode.getRight());
+        }
+    }
+
+    public void traversePostOrder(TreeNode root) throws Exception {  // 右邊回來後印
+        if(root == null) {
+            throw new Exception("Root is null! ");
+        }
+
+        TreeNode currentNode = root;
+
+        if(currentNode.getLeft() != null) {
+            traversePostOrder(currentNode.getLeft());
+        }
+        if(currentNode.getRight() != null) {
+            traversePostOrder(currentNode.getRight());
+        }
+        System.out.print(currentNode.getValue());
     }
 }
