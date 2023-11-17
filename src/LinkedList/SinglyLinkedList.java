@@ -1,138 +1,173 @@
 package LinkedList;
 
-public class SinglyLinkedList {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-    SinglyNode head;
-    SinglyNode tail;
-    int size;
+public class SinglyLinkedList<AnyType> implements Iterable<AnyType> {
 
-    // Constructor
+    private Node<AnyType> head;
+
     public SinglyLinkedList() {
         this.head = null;
-        this.tail = null;
-        this.size = 0;
-    }
-
-    // Getter
-
-    private void setHead(SinglyNode head) {
-        this.head = head;
-    }
-
-    private void setTail(SinglyNode tail) {
-        this.tail = tail;
-    }
-
-    private void setSize(int size) {
-        this.size = size;
-    }
-
-    public SinglyNode getHead() {
-        return head;
-    }
-
-    public SinglyNode getTail() {
-        return tail;
-    }
-
-    public int getSize() {
-        return size;
     }
 
 
-    // public methods
-    public void insert(Object element, int position) throws Exception {
-        if (position > getSize()) {
-            throw new Exception("index out of bounds!");
+    public void addFirst(AnyType element) {
+        this.head = new Node(element, head);
+    }
+
+    public void addLast(AnyType element) {
+        if(head==null) {
+            addFirst(element);
+            return;
         }
+        Node<AnyType> currentNode = this.head;
+        while (currentNode.next!=null) {
+            currentNode = currentNode.next;
+        }
+        currentNode.next = new Node<>(element, null);;
+    }
 
-        SinglyNode newHead = new SinglyNode(element);
+    public Object getFirst() {
+        return this.head;
+    }
 
-        if (position == 0) {
-            newHead.setNext(getHead());
-            setHead(newHead);
+    public Object getLast() {
+        if(head==null) {
+            return null;
+        }
+        Node<AnyType> currentNode = this.head;
+        while (currentNode.next!=null) {
+            currentNode = currentNode.next;
+        }
+        return currentNode;
+    }
+
+    /**
+     * Finds a node containing "key" and insert a new item after it.
+     * @param key
+     * @param item
+     */
+    public void insertAfter(AnyType key, AnyType item) {
+        if(head==null) {
+            return;
+        }
+        Node<AnyType> currentNode = this.head;
+        while (currentNode!=null && !currentNode.data.equals(item)) {
+            currentNode = currentNode.next;
+        }
+        if (currentNode!=null) {
+            currentNode.next = new Node<>(item, currentNode.next);
+        }
+    }
+
+    /**
+     * Finds a node containing "key" and insert a new item before it.
+     * @param key
+     * @param item
+     */
+    public void insertBefore(AnyType key, AnyType item) {
+        if(head==null) {
+            return;
+        }
+        if(head.data.equals(key)) {
+            addFirst(item);
             return;
         }
 
-        if (position == size) {
-            newHead.setNext(null);
-            getTail().setNext(newHead);
-            setTail(newHead);
+        /**
+         * key is not in the head
+         * Needs to keep track of previous node of current node.
+         */
+        Node<AnyType> currentNode = this.head;
+        Node<AnyType> previousNode = null;
+        while(currentNode!=null && !currentNode.data.equals(key)) {
+            previousNode = currentNode;
+            currentNode = currentNode.next;
+        }
+        previousNode = new Node<>(item, currentNode);
+    }
+
+    /**
+     * Removes the first occurrence of a key from the list
+     * @param key a key to be deleted
+     */
+    public void remove(AnyType key) {
+        if(head==null) {
+            return;
+        }
+        if(head.data.equals(key)) {
+            this.head = head.next;
             return;
         }
 
-        int count = 0;
-        SinglyNode currentNode = getHead();
-        SinglyNode formerNode = new SinglyNode();
-        SinglyNode latterNode = new SinglyNode();
-        while (count < position) {
-            count++;
-            if (count == position) {
-                formerNode = currentNode;
-                latterNode = currentNode.getNext().getNext();
-            }
-            currentNode = currentNode.getNext();
+        Node<AnyType> currentNode = this.head;
+        Node<AnyType> previousNode = null;
+        while(currentNode!=null && !currentNode.data.equals(key)) {
+            previousNode = currentNode;
+            currentNode = currentNode.next;
         }
-        formerNode.setNext(currentNode);
-        currentNode.setNext(latterNode);
+        if(currentNode!=null) {
+            previousNode.next = currentNode.next;
+        }
+    }
 
-        return;
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<AnyType> iterator() {
+        return new LinkedListIterator();
     }
 
 
-    public int find(Object element) {
+    private class Node<AnyType> {
 
-        int index = 0;
-        SinglyNode currentNode = getHead();
+        private AnyType data;
+        private Node<AnyType> next;
 
-        while (!currentNode.getElementInsideNode().equals(element)) {
-            currentNode = currentNode.getNext();
-            index++;
-            if (index > getSize()) {
-                index = -1;
-                break;
-            }
+        public Node(AnyType data, Node<AnyType> next) {
+            this.data = data;
+            this.next = next;
         }
-        return index;
     }
 
+    private class LinkedListIterator implements Iterator<AnyType> {
 
-    public void delete(Object element) throws Exception {
-        SinglyNode currentNode = getHead();
+        private Node<AnyType> nextNode;
 
-        if (currentNode == null) {
-            throw new Exception("nothing to delete!");
+        public LinkedListIterator() {
+            this.nextNode = head;
         }
 
-        if (currentNode.getElementInsideNode().equals(element)) {
-            setHead(currentNode.getNext());
-            setSize(getSize() - 1);
-            return;
-        } else {
-            SinglyNode formerNode = currentNode;
-            currentNode = currentNode.getNext();
-
-            while (currentNode != null) {
-                if (currentNode.getElementInsideNode().equals(element)) {
-
-                }
-            }
-            if (currentNode == null) {
-                throw new Exception("nothing to delete!");
-            }
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return nextNode != null;
         }
 
-        for (int i = 1; i < getSize(); i++) {
-            if (currentNode.getElementInsideNode().equals(element)) {
-                currentNode.setNext(currentNode.getNext().getNext());
-                setSize(getSize() - 1);
-                return;
-            } else {
-                if (currentNode.getNext() == null) {
-                    throw new Exception("element not found!");
-                }
-                currentNode = currentNode.getNext();
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public AnyType next() {
+            if(!hasNext()) {
+                throw new NoSuchElementException();
             }
+            AnyType result = nextNode.data;
+            nextNode = nextNode.next;
+            return result;
         }
     }
 }
